@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Outcomes with Floating Table of Contents</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap');
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Mochiy Pop One', sans-serif;
+            background-color: #8EACE8;
+            color: #FFFFFF;
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+nav {
+    padding: 20px 0;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 10px;
+    position: relative; /* Position relative for dropdown */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #EFA9CE;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    background-color: purple;
+}
+
+.sub-nav {
+    display: none; /* Hide sub-nav by default */
+    position: absolute; /* Position it absolutely */
+    top: 100%; /* Position below the parent item */
+    left: 0; /* Align with the parent item */
+    background-color: rgba(255, 255, 255, 0.9); /* Background color for sub-nav */
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2); /* Optional shadow for depth */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+.sub-nav li {
+    margin: 15px 0; /* Add vertical space between sub-nav items */
+}
+
+.sub-nav li a {
+    padding: 10px; /* Padding for sub-nav links */
+}
+
+
+nav ul li:hover > .sub-nav {
+    display: block; /* Show sub-nav on hover */
+}
+
+
+
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+            position: relative; /* Make it relative for positioning child elements */
+        }
+
+        .table-of-contents {
+            width: 250px; /* Fixed width for table of contents */
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            position: fixed; /* Fixed position to stay in view */
+            left: 20px; /* Position from the left */
+            top: 100px; /* Position from the top */
+            max-height: calc(100vh - 120px); /* Prevent overflow */
+            overflow-y: auto; /* Scrollable if content is too long */
+        }
+
+        .table-of-contents h2 {
+            margin-top: 0;
+            color: #EFA9CE;
+        }
+
+        .table-of-contents ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .table-of-contents li {
+            margin-bottom: 10px;
+        }
+
+        .table-of-contents a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        .table-of-contents a:hover {
+            color: #EFA9CE;
+        }
+
+        .content-area {
+            flex-grow: 1; /* Take remaining space */
+            margin-right: 20px; /* Reduce right margin */
+            margin-top: 100px; /* Add top margin to accommodate the horizontal rectangle */
+        }
+
+        .pdf-link-container {
+            position: absolute;
+            right: 20px;
+            top: 35px;
+            width: calc(100% - 340px); /* Adjust width based on other elements */
+            height: calc(48.5vh - 100px); /* This makes it as tall as the vertical version */
+            background-color: #EFA9CE;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+       
+       .pdf-link {
+           text-decoration :none; 
+           color :#FFFFFF; 
+           font-size :1.5em ; 
+       }
+       
+       .section {
+           min-height :100vh; 
+           display :flex; 
+           justify-content :center; 
+           align-items :center; 
+           flex-direction :column; 
+           padding-top :20px ; 
+       }
+       
+       h2 {
+           font-size :2.5em ; 
+           margin-bottom :20px ; 
+       }
+       
+       @media screen and (max-width: 768px) {
+           .main-content {
+               flex-direction: column;
+               margin-right: 0; /* Reset margin on smaller screens */
+           }
+           
+           .pdf-link-container {
+               position: static; /* Make it static on small screens */
+               width:auto; 
+               height:auto; 
+               margin-top :20px ; 
+               transform:none ;
+           }
+           
+           .table-of-contents {
+               position:absolute ;
+               left:auto ;
+               right:auto ;
+               top:auto ;
+               bottom:auto ;
+               max-height:auto ;
+               overflow-y:auto ;
+          }
+       }
+
+    .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between images */
+}
+
+.gallery-image img {
+    width: 100px; /* Set a fixed width for images */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.hover-card {
+    display: none; /* Initially hidden */
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    padding: 15px;
+    border-radius: 10px;
+    position: absolute; /* Position relative to parent */
+}
+.button-container {
+    margin-top: 20px;
+}
+
+.hover-button {
+    background-color: #EFA9CE; /* Background color */
+    font-family: 'Mochiy Pop One', sans-serif;;
+    color: #FFFFFF; /* Text color */
+    border: none; /* No border */
+    padding: 15px 30px; /* Increase padding for a larger button */
+    margin: 5px; /* Margin between buttons */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1.2em; /* Increase font size for better visibility */
+}
+
+
+.hover-button:hover {
+    background-color: purple;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 80%; /* Responsive width */
+    max-height: 80%; /* Responsive height */
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-hover-card {
+    background-color: #EFA9CE; /* Button color */
+    color: #FFFFFF; /* Text color */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    margin-bottom: 10px; /* Space from content */
+}
+
+.close-hover-card:hover {
+    background-color: purple; /* Change color on hover */
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="#about">ABOUT</a></li>
+                <li>
+                    <a href="#projects">PROJECTS</a>
+                    <ul class="sub-nav">
+                        <li><a href="branding.html">Project 1</a></li>
+                        <li><a href="Untitled-1.html">Project 2</a></li>
+                        <li><a href="development.html">Project 3</a></li>
+                        <li><a href="#project4">Project 4</a></li>
+                    </ul>
+                </li>
+                <li><a href="#login">LO'S</a></li>
+            </ul>
+        </nav>
+
+       <div class="main-content" id="home">
+           <div class="table-of-contents">
+               <h2>Work</h2>
+               <ul>
+                   <li><a href="#lo1">Interactive Media Design</a></li>
+                   <li><a href="#lo2">Development and Version control</a></li>
+                   <li><a href="#lo3">Iterative design</a></li>
+                   <li><a href="#lo4">Professional standard</a></li>
+                   <li><a href="#lo5">Personal Leadership</a></li>
+               </ul>
+           </div>
+
+           <div class="content-area">
+            <div id="lo1" class="section">
+                <h2>Learning Outcome 1</h2>
+                <p>Content for Learning Outcome 1 goes here.</p>
+                <div class="button-container">
+                    <button class="hover-button" data-target="#hoverCard36">Branding prototype</button>
+                    <button class="hover-button" data-target="#hoverCard37">Portfolio prototype</button>
+                    <button class="hover-button" data-target="#hoverCard38">Development prototype</button>
+                    <button class="hover-button" data-target="#hoverCard39">Photobooth prototype</button>
+                    <button class="hover-button" data-target="#hoverCard40">Development interview</button>
+                    <button class="hover-button" data-target="#hoverCard41">Persona</button>
+                    <button class="hover-button" data-target="#hoverCard42">Survey branding</button>
+                    <button class="hover-button" data-target="#hoverCard43">Customer journey</button>
+
+                </div>
+                
+                <div class="hover-card" id="hoverCard36" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="brandinprototype1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype2.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype3.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="branding prototype4.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype5.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype6.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype7.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="brandingprototype8.png" alt="Image 3"></a>
+                    </div>
+                    <p>With my research and survey results, I began designing our website. A hero image was placed to align with the project's theme. I sourced information from Fontys' website for the content, including a page dedicated to project ideas that could help new students brainstorm. Later in the third week, I made the website interactive because my group decided to not proceed with creating an actual website and instead to show them an interactive one.
+
+                    Inspiration from Other Websites: In looking for inspiration for our website design, I analyzed several existing websites. Barts Hospital's website particularly stood out as an exemplary model that influenced my design approach. <a href="https://www.figma.com/design/AnQtTBcApFK57MJ2fg3VYP/Untitled-(Copy)?t=Nlb0ukIV9GTovkEv-0" target="_blank">Click here for figma prototype</a>
+                    </p>
+                </div>
+                <div class="hover-card" id="hoverCard37" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="portfolioprototype1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype2.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype3.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype4.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype5.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype6.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype7.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype8.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="portfolioprototype9.png" alt="Image 3"></a>
+                    </div>
+                    <p><a href="https://www.figma.com/design/laQ0VktWomqAnU5Io4ieT1/Untitled?t=Nlb0ukIV9GTovkEv-0" target="_blank">Click here for figma prototype</a></p>
+                </div>
+                <div class="hover-card" id="hoverCard38" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="devprototype1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype2.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype3.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype4.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype5.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype6.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype7.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="devprototype8.png" alt="Image 3"></a>
+                    </div>
+                    <p><a href="https://www.canva.com/design/DAGXMa9gCOY/a-OnnYvhtJqR15JxPnrqlQ/view" target="_blank">Click here for Canva prototype</a></p>
+                </div>
+                <div class="hover-card" id="hoverCard39" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="photobooth.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="photoboothpaper.png" alt="Image 3"></a>
+                        
+                    </div>
+                    <p>for the photo booth because the 2 photo booths of Rhode and life4cut are popular so I decided to go with them and make an open-air photo booth to be easily adjusted wherever they want and also to give people memories from the group. Because people that like this type of music like vintage things and in Amsterdam the vintage photo booth is popular. I decided to have 2 options, the first one is to take a photo and have your ticket printed on the back and the second is to just have your photos with the theme of the posters I made with the group and in every event like Christmas you can take even a photo with the band that is dressed with a Christmas theme clothes. 
+                        My teacher Anke didn’t like the idea with the printed tickets because this way you will attract more already fans of the band but I wanted to present the 2 options anyway, when I had a interview and user research I often was seeing people hang on their wall or put this kind of memories in their scrapbook or Travis Scott concerts and also Taylor Swift you get a bracelet handmade one that you can keep after the concert. 
+                        I made a prototype just to show what can the photo booth looks like if they go with a normal one and one prototyped on my laptop for the open air one. I also made a prototype of the tickets how they can look like. The first picture of the tickets doesn’t have a template, but I showed it to my teacher, and he said to add something that will connect with the posters so after that I added 2 options that are with similar patterns as the posters me and my teammates made
+                        </p>
+                </div>
+                <div class="hover-card" id="hoverCard40" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                    </div>
+                    <p>This is the explanation for Button 3.</p>
+                </div>
+                <div class="hover-card" id="hoverCard41" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                    </div>
+                    <p>This is the explanation for Button 3.</p>
+                </div>
+                <div class="hover-card" id="hoverCard42" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                    </div>
+                    <p>This is the explanation for Button 3.</p>
+                </div>
+                <div class="hover-card" id="hoverCard43" style="display:none;">
+                    <button class="close-hover-card">Close</button>
+                    <div class="image-gallery">
+                        <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                        <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                    </div>
+                    <p>This is the explanation for Button 3.</p>
+                </div>
+               
+            </div>
+
+                <div id="lo2" class="section">
+                    <h2>Learning Outcome 2</h2>
+                    <p>Content for Learning Outcome 2 goes here.</p>
+                    <div class="button-container">
+                        <button class="hover-button" data-target="#hoverCard1">Blender</button>
+                        <button class="hover-button" data-target="#hoverCard2">Portfolio</button>
+                        <button class="hover-button" data-target="#hoverCard3">Blob for Portfolio</button>
+                        <button class="hover-button" data-target="#hoverCard4">Counter</button>
+                        <button class="hover-button" data-target="#hoverCard5">Eatser Egg</button>
+                        <button class="hover-button" data-target="#hoverCard44">Landing Page Nasmak Pm</button>
+                        <button class="hover-button" data-target="#hoverCard45">Countdown Section</button>
+                        <button class="hover-button" data-target="#hoverCard46">Kirby Face</button>
+                        <button class="hover-button" data-target="#hoverCard47">Tickets Customisation</button>
+                        <button class="hover-button" data-target="#hoverCard48">Instagram section</button>
+                        <button class="hover-button" data-target="#hoverCard49">Parallax zoom</button>
+                    </div>
+                    
+                    <div class="hover-card" id="hoverCard1">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="blender.png" alt="Image 1"></a>
+                        </div>
+                        <p>For my portfolio, I wanted to create a 3D room that represents my actual room. Since this was my first time working with any 3D platforms, I started by searching for tutorials on YouTube to help me with the walls and floor. For the smaller details, I did some research to understand what each modifier does. I also made a sketch to map out exactly what I wanted to create. I decided not to use the original colors of my room, but instead, I chose colors from my own color palette.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard2">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                        </div>
+                        <p>For my portfolio </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard3">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>This is a blob that was in one of the lectures with Mikael and I found it really easy and cool so I decided instead of boring circles to put 4 blobs and when i resized them it turned out actually really good and I was also thinking that the theme of my portfolio is more animation vibe so this effect really suited the portfolio theme.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard4">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The counter is also a challange from my first lecture, after the lecture we had to recreate something with what we had in the lecture and it was a counter, my teacher wanted to do a simple one with minimal coding and without the help of AI so I did and hosted it in github and sent it to him afterwards I got a feedback that I didn't really interact with it but it was also something I learn it was a possibility for future</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard5">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard44">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard45">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard46">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="kirby.png" alt="Image 1"></a>
+                        </div>
+                        <p>For this animanion I saw that Mikael had an animation looking like this and when I talked with him he helped me to do this Kirby face and also I designed it to match with my portfolio theme. It was actually not so bad because my goal for the future was to make a something like a room etc with all css and making this kirby face is something like a small step so I wanted to include it in my portfolio.<a href="https://miya2004.github.io/Kirby-face/
+                            " target="_blank">Click here to see the first version</a></p>
+                    </div>
+                    <div class="hover-card" id="hoverCard47">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard48">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard49">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 1"></a>
+                            <a href="#" class="gallery-image"><img src="image2.png" alt="Image 2"></a>
+                        </div>
+                        <p>The nasmak pm website was the developing project the third and last group project so because it was development I wanted to do as much as I can so I can test things that i am curious about, </p>
+                    </div>
+                
+                </div>
+                
+                <!-- Modal for displaying enlarged images -->
+                <div id="imageModal" class="modal">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="modalImage">
+                    <div id="caption"></div>
+                </div>
+                
+                
+                <div id="lo3" class="section">
+                    <h2>Learning Outcome 3</h2>
+                    <p>Content for Learning Outcome 3 goes here.</p>
+                    <div class="button-container">
+                        <button class="hover-button" data-target="#hoverCard6">Logo Portfolio</button>
+                        <button class="hover-button" data-target="#hoverCard7">Adobe using for posters</button>
+                        <button class="hover-button" data-target="#hoverCard8">Posters</button>
+                        <button class="hover-button" data-target="#hoverCard9">Stylescapes branding</button>
+                        <button class="hover-button" data-target="#hoverCard10">Stylescapes portfolio</button>
+                        <button class="hover-button" data-target="#hoverCard11">Promo video for branding</button>
+                        <button class="hover-button" data-target="#hoverCard12">Typography of portfolio</button>
+                        <button class="hover-button" data-target="#hoverCard13">Typography of development project</button>
+                        <button class="hover-button" data-target="#hoverCard14">Stylescape nasmak pm</button>
+                        <button class="hover-button" data-target="#hoverCard15">Portfolio colour palette</button>
+                        <button class="hover-button" data-target="#hoverCard17">Moodboard</button>
+                        <button class="hover-button" data-target="#hoverCard18">Trend analysis (rhode etc) </button>
+                        <button class="hover-button" data-target="#hoverCard19">Blender idea designing</button>
+                        <button class="hover-button" data-target="#hoverCard21">Tickets photobooth</button>
+                        <button class="hover-button" data-target="#hoverCard22">Keychain</button>
+                        <button class="hover-button" data-target="#hoverCard23">Instagram page design </button>
+                        <button class="hover-button" data-target="#hoverCard24">Making changes based on the teacher’s opinion</button>
+                        <button class="hover-button" data-target="#hoverCard50">UX redesigning </button>
+                        <button class="hover-button" data-target="#hoverCard51">Competitor analysis branding</button>
+                        <button class="hover-button" data-target="#hoverCard52">Competitor analysis development</button>
+
+                    </div>
+                    
+                    <div class="hover-card" id="hoverCard6" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="logoportfolio.png" alt="Image 1"></a>
+                        </div>
+                        <p>I wanted to make my own logo and not just have my name but to have a meaning I decided to use the meaning of my short name “Miya” which means palace, or shrine in Japan. I used the shrine one because it will suit the Cherry blossom more. The cherry blossom is a traditional tree in Vietnam which is my nationality. I did AI images and ended up with this logo
+
+                            2nd version sprint – I didn’t want to include my name I wanted the logo to have only the images the shrine and the cherry blossom because more logos have their name which is simple and every logo can be just the name but if you put the logo without the name maybe people will be more interest in why did you put exactly this is it because it gives you Asian vibes or there is a deeper meaning so it makes people curious that’s why I decided to leave only the cherry blossom and the shrine 
+                            </p>
+                    </div>
+                
+                    <div class="hover-card" id="hoverCard7" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster2.png" alt="Image 2"></a>
+                            <a href="#" class="gallery-image"><img src="image3.png" alt="Image 3"></a>
+                        </div>
+                        <p>This is the explanation for Button 2.</p>
+                    </div>
+                
+                    <div class="hover-card" id="hoverCard8" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="poster2.png" alt="Image 4"></a>
+                            <a href="#" class="gallery-image"><img src="poster3.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="poster4.png" alt="Image 4"></a>
+                            <a href="#" class="gallery-image"><img src="poster5.png" alt="Image 4"></a>
+                        </div>
+                        <p>After making the stylescape I made some posters that will suit for their Instagram page and just for posters to print and have them around the buildings. I made posters for upcoming concerts, posters for their albums and also, I made a few posts for Instagram and highlights that can be used. Posts a lot of artists write down their songs on a vintage paper-like background and also they have handwrited typography with their posters and because the band wants crazy and chaotic vibe I made with the colours posters that have a lot of colours in one but I also made a clean posters and posts so that the 2 main colours are the first thing you see and that their Instagram feed can be really attractive.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard9" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="stylescapebranding.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="stylescapebranding2.png" alt="Image 4"></a>
+                        </div>
+                        <p>To guide our design process, I created two style scapes: one with my teammates and another individually. Before doing the style scape, I researched what style scape should look like. Style scapes are visual representations that help define the aesthetic direction of a project.
+                        Color and Typography Choices: For my style scape, I chose colors that resonate with our project's theme. Blue was selected for its association with doctor uniforms, while grey reflects nurse uniforms. Black and white were used for text to ensure clarity. For typography, I opted for fonts that enhance readability and lend a professional appearance to the design rather than childish
+                        </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard10" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="stylescapeportfolio.png" alt="Image 3"></a>
+                        </div>
+                        <p>After deciding which colour palette I want to chose i started making my stylescape, because the colours are pastel and the vibe is more childish i decided to go with some animations and also the typography is more bold and playful. When you look at the stylescape you can immediately imagine what kind of a person I am I also user test it with my friday teacher and she told me without me asking her that seeing the stylescape she just know what I like.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard11" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>In collaboration with Aleksa, I produced a promo video inspired by TikTok trends. We used video clips from YouTube and the videos that Anke sent us to make an engaging narrative. The tools InShot and Canva were used in editing and finalizing the video. I gathered all the videos and saved them, then proceeded to choose the videos that are suitable for the video also I removed a lot of shots because I didn’t want the video to be too long. In my opinion, 30sec we’re perfectly fine. Me and Aleksa added background music from YouTube, and for the end result, we showed it to another teammate to see if we needed to adjust something.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard12" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard13" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard14" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="style1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="style2.png" alt="Image 4"></a>
+                            <a href="#" class="gallery-image"><img src="style4.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="style3.png" alt="Image 4"></a>
+                        </div>
+                        <p>1. First stylescape: I think the contrast works well. The band's name is written in a way that gives off an '80s, disco, and vintage vibe. I added chaotic, nighttime-themed pictures to match the energy of their new event, *Dancing Night*. I also included images of a punk group performing live, to reflect the raw, energetic vibe of their music.
+
+                            2. Second stylescape: This one is a totally different approach from the new wave style. It’s softer and more aligned with what I would call "white girl music." I wanted to include this to show the band a different direction and see if they’d be open to changing their style. Personally, as someone from this generation, I think soft colours like these would appeal to a lot of people today.
+                            
+                            3. Third stylescape: This is one of my favourites that I created. I stuck with their core colours—red and yellow—while also adding soft pink and dark purple. These colours pop a lot, especially on things like posters, and the red and yellow are a nod to their origins in a chicken coop. I thought it would be nice to keep that part of their history alive visually.
+                            
+                            4. Fourth stylescape: This is like the third one, but I swapped out the red and yellow for blue. I wanted to see how it would look with a different colour scheme.
+                            
+                            The feedback I received from the client is that they don't want to be perceived as a punk band, but rather as a new wave group. That’s why I made changes to some of the stylescapes to better reflect that identity.
+                            </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard15" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="palette1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="palette2.png" alt="Image 4"></a>
+                            <a href="#" class="gallery-image"><img src="palette3.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="palette4.png" alt="Image 4"></a>
+                        </div>
+                        <p>For my portfolio, I decided first to watch for inspiration on Pinterest, dribble, TikTok, and YouTube. I found a lot of portfolios that I wanted to make but in the end, I end up with the design that you will see later. After getting inspiration I decided to go to Colors.co and make my own color palette. I had 5 options and after imagining how the website can look I chose the last one because I wanted to have more soft and animated vibes. 
+                            
+                            At first I wanted my portfolio to have cactus vibes and to have little pink daisies but also to represent matcha colour too but when I was thinking of the design and when I made it I didn’t like it that much so I started making another colour palette
+                             
+                            
+                            With the second colour palette I still wanted to do this vibe and try to fit different colours and maybe have a sky and a lot of cactuses but then I did Pinterest scrolling and decided to go for pastel colours or something more animated and also I wanted to be connected with my logo or somehow not distract you from the meaning of the logo then I came up with the 3rd version 
+                            
+                            The third version had rally strong blue and the pink and green didn’t really fit well because there were also 3 blue colours already so you can clearly see that it does not fit with the other colours and pink and green can feel overwhelmed by the blue colours so I wanted to have soft blue that’s why I gave up green because I won’t do cactus or matcha anyway 
+                            
+                             
+                            
+                            
+                            With my end colour palette I saw that if every colour is that bright and soft the contrast won’t be really good also the text if its black it will be too strong and if it was white it will almost invisible so I putted purple more darkish but also give you a childish vibe then I putted pink and the sky blue I putted soft purple for the background of the hoover card and content table, with this purple the text can be pink or white it fits well both colours then I decided to make a small ai girl that has mine sweater hair and eyes and I putted in a circle
+                            </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard17" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="moodboard.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="moodboardresearch.png" alt="Image 4"></a>
+                        </div>
+                        <p>First, I looked online to understand what a new wave punk band’s aesthetic is like. I explored their website and Instagram page to see the colors they typically use and the themes of their lyrics. I wanted to get a sense of what they sing about most often. After that, I went to TikTok to observe how fans of this type of music express themselves—how they dress, how their rooms are decorated, and what they like. I noticed that their style is heavily influenced by vintage items, with lots of bright colors and unique, unusual choices. Their rooms are filled with posters, concert tickets, lights, pictures, and drawings—often featuring a colorful or old-paper look.
+                            For my mood board, I included an egg and chicken, symbolizing the origins of the band’s songwriting process. I also added an image of a girl with green hair, as many fans I saw have brightly colored hair. Overall, I found that the aesthetic is chaotic and vibrant, rather than clean and simple.
+                            When I showed my teacher my posters, he mentioned that he prefers a more polished, one-color style and showed me examples of his work, which are very professional and well put together. However, I believe that professionalism doesn’t always mean clean and orderly. For a new wave punk band, the goal is to capture the raw, expressive energy of their style. If I were working with this band, I would want to create posters that reflect my own interpretation of their aesthetic, embracing the chaotic and bold vibe that defines their look and sound.
+                            </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard18" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard19" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard21" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="tickets.png" alt="Image 3"></a>
+                        </div>
+                        <p>I also made a prototype of the tickets how they can look like.One side is the ticket and the other is the photo frame with the theme and colour of the posters me and my team made.At first the photo frame was only with a logo but my techer told me it would be nice to be able to have photos without buying a ticket so I liked the idea and end up putting a colourful frame.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard22" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="spotify.png" alt="Image 3"></a>
+                        </div>
+                        <p>For the Spotify keychain, I designed a prototype featuring the Nasmak group poster with plus and minus icons. My idea was to have these keychains available at the stand-up booth, so that whenever someone buys a drink, they also get a keychain. Alternatively, they could be sold as "merch" after the concert. The Spotify keychain is really practical because it allows people to scan the code and immediately access the band's songs, rather than having to search for the group manually. If someone recommends the band to someone else, they’re less likely to search it up later. However, if you give them the keychain, they'll be more likely to scan the code out of curiosity and check out the music right away.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard23" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="instagram.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="instachannel.png" alt="Image 4"></a>
+                        </div>
+                        <p>For their Instagram feed, I suggested posting BTS (behind the scenes) reels after every concert, but we didn't end up using that idea. For the Instagram feed I designed, I used the 9-photo method with 2 main colours that pop and are eye-catching. Having a well themed feed like this can attract more people. For the posters, I suggested they post them as stories and upload them a week before the concert. Including all the relevant links in the bio section for links is helpful rather than putting it in the bio but as a text, and creating a personalized hashtag would allow fans to follow and easily find their content. I also recommended creating a channel to engage with their fans and attract people interested in that genre of music. In this channel, the band could text their fans daily, post little vlogs or updates, and interact more directly with them—rather than just posting a generic picture of what they are eating with the caption "Happy." Underneath there are 9 pictures of the first 9 photos that they can post with yellow and red dominating. (all the pictures used, without the 4th one, are all the band’s pictures and my own posters)<a href="HTTPS://WWW.CANVA.COM/DESIGN/DAGV4CLXCCS/WBQSIWSI273XE_PYSKI9LW/EDIT?UTM_CONTENT=DAGV4CLXCCS&UTM_CAMPAIGN=DESIGNSHARE&UTM_MEDIUM=LINK2&UTM_SOURCE=SHAREBUTTON
+                            " target="_blank">Click here to see the prototype version</a></p>
+                    </div>
+                    <div class="hover-card" id="hoverCard24" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard50" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard51" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard52" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                
+                </div>
+                
+               
+                
+                <div id="lo4" class="section">
+                    <h2>Learning Outcome 4</h2>
+                    <p>Content for Learning Outcome 4 goes here.</p>
+                    <div class="button-container">
+                        <button class="hover-button" data-target="#hoverCard25">Teams Chart</button>
+                        <button class="hover-button" data-target="#hoverCard26">Trello board</button>
+                        <button class="hover-button" data-target="#hoverCard27">Teams planning branding</button>
+                        <button class="hover-button" data-target="#hoverCard28">Project plan branding</button>
+                        <button class="hover-button" data-target="#hoverCard29">Project Plan development</button>
+                        <button class="hover-button" data-target="#hoverCard30">Project plan Project X</button>
+                        <button class="hover-button" data-target="#hoverCard31">Content strategy</button>
+                        <button class="hover-button" data-target="#hoverCard33">Changes after feedback jo an</button>
+                        <button class="hover-button" data-target="#hoverCard34">Feedback sessions</button>
+                        <button class="hover-button" data-target="#hoverCard35">Moscow table</button>
+                        <button class="hover-button" data-target="#hoverCard36">Presentation Nasmak PM</button>
+
+                    </div>
+                    <div class="hover-card" id="hoverCard25" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="teamschart.png" alt="Image 3"></a>
+                        </div>
+                        <p>First day I made a shared team charter so that everyone could write their details. I used a template from Canva. The team charter helped us assign the future tasks for the project</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard26" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="trellodevelopmen.png" alt="Image 3"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard27" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="teamsplanning.png" alt="Image 3"></a>
+                        </div>
+                        <p>Second week after getting sad feedback from Anke I did a planning in Trello that was moved to Teams because my teammates preferred it. I did it in weeks because that helped me and the others to have a clear vision of what we have to do and when. With every task, there were people assigned and deadlines too so we could have in mind when to start. </p>
+                    </div>
+                    <div class="hover-card" id="hoverCard28" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="projectplanbranding.png" alt="Image 3"></a>
+                        </div>
+                        <p>During the first week, I assist with the project plan. This helped me set clear goals for the project, ensuring that all team members have a task in this project. Also, it helped me with organizing my future weeks and what should I do.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard29" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="pr" alt="Image 3"></a>
+                        </div>
+                        <p>simetign</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard30" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard31" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="contentstrategy.png" alt="Image 3"></a>
+                        </div>
+                        <p>I contributed to developing our content strategy, for the message and concept I wanted to put “have fun while making a difference” so people can be more interested and not think of this study as a boring thing but as something interesting and enjoyable.
+                        For media I putted everything that we have done for the project as a media aspect 
+                            </p>
+                    </div>
+
+                    <div class="hover-card" id="hoverCard33" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard34" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                    <div class="hover-card" id="hoverCard35" style="display:none;">
+                        <button class="close-hover-card">Close</button>
+                        <div class="image-gallery">
+                            <a href="#" class="gallery-image"><img src="poster1.png" alt="Image 3"></a>
+                            <a href="#" class="gallery-image"><img src="image4.png" alt="Image 4"></a>
+                        </div>
+                        <p>This is the explanation for Button 3.</p>
+                    </div>
+                </div>
+
+
+                <div id="lo5" class="section">
+                    <h2>Learning Outcome 5</h2>
+                    <p>
+                        This semester, my goal was to explore all the possibilities in ICT Media Design, because I wanted to get a clearer view of what I want to do one day. I have been looking at tutorials online to improve my HTML and CSS skills and I have also been using AI to help me in my codes. One thing I really loved was 3D modeling with Blender, and that is why I decided to do something with that for Project X. I still don't know what exactly job I want to have yet, but I think by discovering more and more I will eventually find my path.</p>
+                </div>
+          </div>
+
+
+          <div class="pdf-link-container">
+              <a href="path-to-your-pdf-file.pdf" class="pdf-link" target="_blank">
+                  View PDF
+              </a>
+          </div>
+
+       </div>
+   </div>
+</body>
+<script>
+   // Show and hide hover cards based on button clicks
+document.querySelectorAll('.hover-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        
+        // Hide all other hover cards
+        document.querySelectorAll('.hover-card').forEach(card => {
+            if (card.id !== targetId.replace('#', '')) { // Keep the targeted one visible
+                card.style.display = 'none';
+            }
+        });
+
+        // Show the targeted hover card
+        const targetCard = document.querySelector(targetId);
+        if (targetCard) {
+            targetCard.style.display = 'block'; // Show only the targeted card
+        }
+    });
+});
+
+// Handle image clicks to show modal without closing hover cards
+document.querySelectorAll('.gallery-image img').forEach(image => {
+    image.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default anchor behavior
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const captionText = document.getElementById("caption");
+
+        modal.style.display = "block"; // Show modal
+        modalImg.src = this.src; // Set source for modal image
+        captionText.innerHTML = this.alt; // Set caption text
+    });
+});
+
+// Close modal functionality
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    const modal = document.getElementById("imageModal");
+    modal.style.display = "none"; // Hide modal when close button is clicked
+}
+
+// Close hover card functionality
+document.querySelectorAll('.close-hover-card').forEach(button => {
+    button.addEventListener('click', function() {
+        const hoverCard = this.parentElement; // Get the parent hover card of the clicked button
+        hoverCard.style.display = 'none'; // Hide the specific hover card
+    });
+});
+
+</script>
+</html>
