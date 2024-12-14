@@ -1,0 +1,500 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap');
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #8EACE8;
+    scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+  .wrapper,
+  .content {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .content {
+    overflow-x: hidden;
+  }
+  
+  .content .section {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .content .section.hero {
+    background-image: url(Mini_Room_-_Art_-_Copy_2-1440x693-removebg-preview.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    perspective: 500px;
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 0;
+    z-index: 1000; /* Ensure nav is above other content */
+}
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 10px;
+    position: relative; /* Position relative for dropdown */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #EFA9CE;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+
+nav ul li a:hover {
+    background-color: purple;
+}
+
+.sub-nav {
+    display: none; /* Hide sub-nav by default */
+    position: absolute; /* Position it absolutely */
+    top: 100%; /* Position below the parent item */
+    left: 0; /* Align with the parent item */
+    background-color: rgba(255, 255, 255, 0.9); /* Background color for sub-nav */
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2); /* Optional shadow for depth */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+.sub-nav li {
+    margin: 15px 0; /* Add vertical space between sub-nav items */
+}
+
+.sub-nav li a {
+    padding: 10px; /* Padding for sub-nav links */
+}
+
+
+nav ul li:hover > .sub-nav {
+    display: block; /* Show sub-nav on hover */
+}
+.sec {
+    min-height: 100vh;
+    padding: 100px;
+    background-color: #8EACE8;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: auto;
+    box-sizing: border-box;
+}
+.sec {
+    min-height: 100vh;
+    padding: 100px;
+    background-color: #8EACE8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.circle {
+    width: 350px;
+    height: 350px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-background {
+    width: 350px;
+    height: 350px;
+    background-color: #EFA9CE;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+}
+
+.circle img {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+}
+
+
+.info {
+    flex: 1;
+    padding: 0 50px;
+}
+
+.info h2 {
+    font-size: 2.3em;
+    margin-bottom: 20px;
+    color: white;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+
+.info p {
+    font-size: 19px;
+    color: white;
+    margin-bottom: 10px;
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+
+.right-image {
+    width: 300px;
+}
+
+.right-image img {
+    width: 100%;
+    height: auto;
+}
+
+.circle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+@keyframes blobbing {
+    0%, 100% { 
+        d: path("M45.3,-72C55.6,-63.9,58.7,-46.1,58.9,-31.2C59,-16.3,56.2,-4.3,55.7,8.9C55.2,22.1,57,36.5,50.8,44.7C44.7,52.9,30.7,54.9,16.9,60.1C3.1,65.2,-10.4,73.5,-21.6,71.2C-32.7,69,-41.5,56.2,-48.2,44.2C-55,32.1,-59.8,20.7,-62.4,8.5C-64.9,-3.7,-65,-16.8,-59.1,-25.9C-53.2,-35,-41.3,-40.3,-30.4,-48.1C-19.5,-55.9,-9.8,-66.3,3.9,-72.4C17.5,-78.4,35,-80.1,45.3,-72Z");
+    }
+    50% { 
+        d: path("M33.4,-54C42,-46.5,46.8,-35,54.7,-23.3C62.6,-11.7,73.6,0.3,76,13.7C78.4,27.2,72.2,42.2,61,50C49.8,57.9,33.6,58.5,18.4,63.4C3.1,68.3,-11.1,77.3,-25.9,77.8C-40.7,78.2,-56,70,-64.5,57.4C-73,44.9,-74.7,27.9,-74.5,12.3C-74.3,-3.4,-72.2,-17.7,-67.8,-32.4C-63.3,-47.1,-56.5,-62.2,-44.8,-68.4C-33.1,-74.5,-16.6,-71.8,-2.1,-68.6C12.4,-65.3,24.8,-61.6,33.4,-54Z");
+    }
+}
+
+.nav-blob {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-blob svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.nav-blob path {
+    animation: blobbing 7s ease-in-out infinite;
+    fill: #EFA9CE;
+}
+
+.nav-blob span {
+    position: relative;
+    z-index: 1;
+    color: white;
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 24px;
+}
+
+.nav-blob:hover svg {
+    transform: scale(1.1);
+}
+
+.nav-blob:hover path {
+    fill: #D77FA1;
+}
+.nav-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #EFA9CE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+    text-decoration: none;
+    color: white;
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 24px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.nav-circle:hover {
+    transform: scale(1.1);
+    background-color: #D77FA1;
+}
+
+/* Make the container scrollable on smaller screens */
+@media (max-width: 768px) {
+    .circle-container {
+        justify-content: flex-start;
+        padding: 20px;
+    }
+}
+
+:root {
+    --color-body-kirby: white;
+    --color-bodyshadow-kirby: #8EACE8;
+    --color-cheeks-kirby: #EFA9CE;
+    --color-eye-outline-kirby: #000;
+    --color-eye-iris-kirby: #000;
+    --color-eye-pupil-kirby: #FFF;
+    --color-eye-kirby: #057FC0;
+    --speed-blinking-eyes: 5000ms;
+    --location-face-horizonal: 0%;
+    --location-face-vertical: 0%;
+    --eyes-perspective-horizontal: 0deg;
+    --eyes-perspective-vertical: 0deg;
+    --location-iris-vertical: 0%;
+    --location-iris-horizontal: 0%;
+    --location-pupil-vertical: 0%;
+    --location-pupil-horizontal: 0%;
+}
+
+@font-face {
+    font-family: "Kirby Classic";
+    font-weight: 400;
+    src: url("../fonts/kirby-classic.ttf");
+}
+
+@keyframes blink {
+    99% {
+        aspect-ratio: 1/2.5;
+        transform: translateY(0);
+    }
+    100% {
+        aspect-ratio: 100/1;
+        transform: translateY(20vh);
+    }
+}
+
+
+#egg-container {
+    width: 300px;
+    height: 400px;
+    background-color: var(--color-body-kirby);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 20px 5px var(--color-bodyshadow-kirby) inset;
+}
+
+#face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: var(--location-face-horizonal);
+    top: var(--location-face-vertical);
+}
+
+#tooltip {
+    position: fixed;
+    transform: translateX(10px) translateY(-40px);
+    left: -100%;
+    top: -100%;
+    background-color: #fff;
+    border: 2px solid #000;
+    opacity: 0.5;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 9;
+}
+
+#eyes {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    perspective: 500px;
+    transform: rotateX(var(--eyes-perspective-vertical)) rotateY(var(--eyes-perspective-horizontal));
+    transform-style: preserve-3d;
+}
+
+#eyes .eye {
+    position: relative;
+    border: 15px solid var(--color-eye-outline-kirby);
+    border-radius: 50%;
+    width: 30%;
+    aspect-ratio: 1/2.5;
+    background-color: var(--color-eye-kirby);
+    overflow: hidden;
+    animation-name: blink;
+    animation-duration: var(--speed-blinking-eyes);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-fill-mode: both;
+}
+
+#eyes .eye:nth-child(1) {
+    rotate: 2deg;
+}
+
+#eyes .eye:nth-child(2) {
+    rotate: -2deg;
+}
+
+#eyes .eye .iris {
+    position: absolute;
+    top: calc(var(--location-iris-vertical) - 15%);
+    left: -15%;
+    border-radius: 50%;
+    width: 130%;
+    aspect-ratio: 1/2;
+    background-color: black;
+    overflow: hidden;
+}
+
+#eyes .eye:nth-child(1) .iris {
+    left: calc(var(--location-iris-horizontal) - 11%);
+}
+
+#eyes .eye:nth-child(2) .iris {
+    left: calc(var(--location-iris-horizontal) - 20%);
+}
+
+#eyes .eye .iris .pupil {
+    position: absolute;
+    background-color: var(--color-eye-pupil-kirby);
+    border-radius: 50%;
+    width: 70%;
+    left: 15%;
+    aspect-ratio: 1/1.6;
+    top: calc(var(--location-pupil-vertical) + 25%);
+}
+
+#eyes .eye:nth-child(1) .iris .pupil {
+    left: calc(var(--location-pupil-horizontal) + 18%);
+}
+
+#eyes .eye:nth-child(2) .iris .pupil {
+    left: calc(var(--location-pupil-horizontal) + 11%);
+}
+
+#mouth {
+    position: absolute;
+    top: 70%;
+    transform: translateX(-50%);
+    left: 50%;
+    width: 30% !important;
+}
+
+#mouth .inner {
+    position: relative;
+    border: 12px solid #000;
+    aspect-ratio: 1/1.25;
+    border-radius: 50%/ 25% 25% 75% 75%;
+    transform: translateX(-50%);
+    left: 50%;
+    background-color: #8f003a;
+    overflow: hidden;
+}
+
+#mouth .side {
+    display: none;
+    border: 12px solid #000;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    width: 60%;
+    border-radius: 50%;
+    height: 300px;
+    position: absolute;
+    top: -30%;
+    transform-origin: center center;
+}
+
+#mouth .side:nth-of-type(1) {
+    transform: rotate(70deg);
+    left: -190px;
+}
+
+#mouth .side:nth-of-type(2) {
+    transform: rotate(-70deg);
+    right: -190px;
+}
+
+#mouth.closed .inner {
+    aspect-ratio: unset;
+    height: 150px;
+    background-color: transparent;
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
+
+#mouth.closed .inner .tung {
+    display: none;
+}
+
+#mouth.closed .side {
+    display: block;
+}
+
+#mouth .inner .tung {
+    position: absolute;
+    top: 50%;
+    width: 200%;
+    left: -50%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 12px solid black;
+    background-color: #ec6a8c;
+}
+
+#cheeks {
+    position: absolute;
+    top: 55%;
+    left: 5%;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#cheeks .cheek {
+    width: 20%;
+    aspect-ratio: 2/1;
+    background-color: var(--color-cheeks-kirby);
+    border-radius: 50%;
+}
