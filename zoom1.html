@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio with Scrollable Sections</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        .wrapper {
+            width: 100%;
+            position: relative;
+        }
+        .image-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .section {
+            min-height: 100vh;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .section.hero {
+            background-image: url(Mini_Room_-_Art_-_Copy_2-1440x693-removebg-preview.png);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .section:nth-child(odd) {
+            background-color: #f0f0f0;
+        }
+        .section:nth-child(even) {
+            background-color: #e0e0e0;
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+        p {
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="image-container">
+            <img src="homeimage.png" alt="Background">
+        </div>
+        <div class="content">
+            <section class="section hero">
+                <h1>Welcome to My Portfolio</h1>
+                <p>Scroll down to explore</p>
+            </section>
+            <section class="section">
+                <h2>About Me</h2>
+                <p>This is the about section. Here you can add information about yourself.</p>
+            </section>
+            <section class="section">
+                <h2>My Projects</h2>
+                <p>Here you can showcase some of your projects.</p>
+            </section>
+            <section class="section">
+                <h2>Contact</h2>
+                <p>Add your contact information or a contact form here.</p>
+            </section>
+        </div>
+    </div>
+</body>
+</html>
