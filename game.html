@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            background: linear-gradient(to bottom, #6a5acd, #483d8b);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        document.body.appendChild(canvas);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const playerImage = new Image();
+        playerImage.src = ''; // Replace with your player image file
+
+        const platformImage = new Image();
+        platformImage.src = 'platform.png'; // Replace with your platform image file
+
+        const bunnyImage = new Image();
+        bunnyImage.src = 'bunny.png'; // Replace with your bunny image file
+
+        const iceCreamImage = new Image();
+        iceCreamImage.src = 'icecream.png'; // Replace with your ice cream image file
+
+        const player = {
+            x: 100,
+            y: canvas.height - 200,
+            width: 50,
+            height: 50,
+            speed: 5,
+            dy: 0,
+            jumping: false
+        };
+
+        const gravity = 0.5;
+
+        const platforms = [
+            { x: 0, y: canvas.height - 100 },
+            { x: 300, y: canvas.height - 200 },
+            { x: 600, y: canvas.height - 150 }
+        ];
+
+        const bunnies = [
+            { x: 400, y: canvas.height - 200, width: 50, height: 50 }
+        ];
+
+        const iceCreams = [
+            { x: 200, y: canvas.height - 150, width: 30, height: 30 }
+        ];
+
+        let keys = {};
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+
+        function update() {
+            if (keys['ArrowRight']) player.x += player.speed;
+            if (keys['ArrowLeft']) player.x -= player.speed;
+
+            if (keys['Space'] && !player.jumping) {
+                player.jumping = true;
+                player.dy = -10;
+            }
+
+            player.dy += gravity;
+            player.y += player.dy;
+
+            platforms.forEach((platform) => {
+                if (
+                    player.x < platform.x + platformImage.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + player.height < platform.y + 10 &&
+                    player.y + player.height + player.dy >= platform.y
+                ) {
+                    player.jumping = false;
+                    player.dy = 0;
+                }
+            });
+
+            if (player.y > canvas.height) {
+                player.y = canvas.height - player.height;
+                player.jumping = false;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            platforms.forEach((platform) => {
+                ctx.drawImage(platformImage, platform.x, platform.y);
+            });
+
+            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+
+            bunnies.forEach((bunny) => {
+                ctx.drawImage(bunnyImage, bunny.x, bunny.y, bunny.width, bunny.height);
+            });
+
+            iceCreams.forEach((iceCream) => {
+                ctx.drawImage(iceCreamImage, iceCream.x, iceCream.y, iceCream.width, iceCream.height);
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
