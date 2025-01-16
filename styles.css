@@ -113,7 +113,7 @@ nav ul li:hover > .sub-nav {
     justify-content: flex-end;
     align-items: center;
     padding-right: 25%;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .vertical-line-container {
@@ -368,6 +368,7 @@ nav ul li:hover > .sub-nav {
 }
 
 .hover-button:hover {
-    background-color: purple; /* Change background on hover */
+    background-color: #4D429A; /* Change background on hover */
     transform: scale(1.05); /* Slight scaling effect */
 }
+
